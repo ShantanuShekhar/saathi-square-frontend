@@ -1,0 +1,20 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <mat-card class="welcome-card">
+    <h2>Welcome back, {{ userName }} 👋</h2>
+    <p>Here’s a quick overview of your society</p>
+  </mat-card>
+
+  <div class="stats-section">
+    <app-stats-card icon="groups" title="Society Count" [value]="societyCount"></app-stats-card>
+    <app-stats-card icon="apartment" title="Tower Count" [value]="towerCount"></app-stats-card>
+    <app-stats-card icon="engineering" title="Floor Count" [value]="floorCount"></app-stats-card>
+    <app-stats-card icon="groups" title="Flat Count" [value]="flatCount"></app-stats-card>
+    <app-stats-card icon="payments" title="Due Payments" [value]="'25000'"></app-stats-card>
+  </div>  
+
+  <div class="widgets-section">
+    <app-announcement-card></app-announcement-card>
+    <app-maintenance-status></app-maintenance-status>
+  </div>
+</div>

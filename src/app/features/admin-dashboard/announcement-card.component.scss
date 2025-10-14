@@ -1,0 +1,20 @@
+.announcement-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: #fff8e1;
+
+  h3 {
+    margin-bottom: 1rem;
+    color: #8d6e63;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    margin: 0;
+
+    li {
+      padding: 0.5rem 0;
+    }
+  }
+}

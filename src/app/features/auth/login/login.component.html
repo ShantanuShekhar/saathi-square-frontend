@@ -1,0 +1,45 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-left">
+      <img src="assets/logo.png" alt="Sathi-Square Logo" class="logo" />
+      <h2>Sathi-Square</h2>
+      <p>Smart Society Management</p>
+    </div>
+
+    <div class="login-form">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <h3>Welcome Back</h3>
+        <p class="subtitle">Please login to your account</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="username" />
+          <mat-error *ngIf="loginForm.get('username')?.invalid">
+            Valid email is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.invalid">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="actions">
+          <a routerLink="/forgot-password">Forgot Password?</a>
+        </div>
+
+        <button mat-raised-button color="primary" class="full-width login-button" type="submit" [disabled]="loginForm.invalid">
+          Login
+        </button>
+
+        <p class="signup-link">Don't have an account? <a routerLink="/register">Register</a></p>
+      </form>
+    </div>
+  </div>
+</div>

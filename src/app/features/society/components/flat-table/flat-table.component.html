@@ -1,0 +1,45 @@
+<div class="flat-table-container">
+
+  <!-- 🔹 Filter Component -->
+  <app-filters (filterChanged)="onFilterChange($event)"></app-filters>
+
+  <table class="flat-table">
+    <thead>
+      <tr>
+        <th>Flat No</th>
+        <th>Tower Name</th>
+        <th>Floor</th>
+        <th>Occupancy Status</th>
+        <th>Area (sqft)</th>
+        <th>Unit Rate</th>
+        <th>Owner ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let flat of flats">
+        <td>{{ flat.flatNo }}</td>
+        <td>{{ flat.towerName }}</td>
+        <td>{{ flat.floor }}</td>
+        <td>
+          <span class="status"
+                [ngClass]="{
+                  'occupied': flat.occupancyStatus === 'Occupied',
+                  'vacant': flat.occupancyStatus === 'Vacant'
+                }">
+            {{ flat.occupancyStatus }}
+          </span>
+        </td>
+        <td>{{ flat.areaSqft }}</td>
+        <td>{{ flat.unitRate }}</td>
+        <td>{{ flat.ownerId || 'N/A' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</div>

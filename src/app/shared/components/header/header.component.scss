@@ -1,0 +1,14 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.spacer {
+  flex: 1;
+}

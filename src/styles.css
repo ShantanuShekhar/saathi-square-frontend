@@ -1,1 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: white;
+  font-family: Roboto, sans-serif;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* Light mode default */
+/* Light mode default */
+/* Base light mode */
+body {
+  background-color: #f9f9f9;
+  color: #111;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+/* Smooth transition for everything */
+* {
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+
+/* Dark mode */
+body.dark-theme {
+  background-color: #121212;
+  color: #eee;
+}
+
+/* Apply dark mode to all elements except images */
+body.dark-theme *:not(img) {
+  background-color: #1e1e1e !important;
+  color: #eee !important;
+  border-color: #333 !important; /* borders dark */
+}
+
+/* Links, buttons, headings, forms, table text */
+body.dark-theme a,
+body.dark-theme button,
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme label,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme li,
+body.dark-theme td,
+body.dark-theme th {
+  color: #eee !important;
+}
+
+/* Optional: cards, modals, sections */
+body.dark-theme .card,
+body.dark-theme .modal,
+body.dark-theme section,
+body.dark-theme .top-bar,
+body.dark-theme .main-content,
+body.dark-theme header,
+body.dark-theme nav,
+body.dark-theme footer {
+  background-color: #1e1e1e !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+
+/* Keep images normal */
+body.dark-theme img {
+  filter: none !important;
+}

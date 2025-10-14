@@ -1,0 +1,17 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.menu-btn {
+  margin-right: 10px;
+}
+
+.main-content {
+  min-height: calc(100vh - 64px); // toolbar height adjust
+  padding: 1rem;
+  background-color: #fafafa;
+}

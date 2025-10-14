@@ -1,0 +1,7 @@
+<app-flat-table
+  [flats]="flats"
+  [isLoading]="isLoading"
+  (viewDetails)="onViewDetails($event)"
+></app-flat-table>
+
+<app-flat-details *ngIf="selectedFlat" [flat]="selectedFlat"></app-flat-details>

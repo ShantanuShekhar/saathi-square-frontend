@@ -1,0 +1,30 @@
+<div class="filters-container">
+  <div class="filter-item">
+    <label for="flatNo">Flat No</label>
+    <input id="flatNo" type="text" placeholder="Enter Flat No" [(ngModel)]="flatNo" />
+  </div>
+
+  <div class="filter-item">
+    <label for="towerId">Tower ID</label>
+    <input id="towerId" type="text" placeholder="Enter Tower ID" [(ngModel)]="towerId" />
+  </div>
+
+  <div class="filter-item">
+    <label for="floorNo">Floor No</label>
+    <input id="floorNo" type="text" placeholder="Enter Floor No" [(ngModel)]="floorNo" />
+  </div>
+
+  <div class="filter-item">
+    <label for="status">Status</label>
+    <select id="status" [(ngModel)]="status">
+      <option value="">All Status</option>
+      <option value="OCCUPIED">Occupied</option>
+      <option value="VACANT">Vacant</option>
+    </select>
+  </div>
+
+  <div class="filter-buttons">
+    <button class="btn apply" (click)="applyFilter()">Apply</button>
+    <button class="btn reset" (click)="resetFilter()">Reset</button>
+  </div>
+</div>

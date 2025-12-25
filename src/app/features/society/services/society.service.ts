@@ -9,6 +9,6 @@ export class SocietyService {
   constructor(private http: HttpClient) {}
     private baseUrl = environment.societyBaseUrl;
    getFlatsPaginated(payload: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/details`, payload);
+    return this.http.post<any>(`${this.baseUrl}/paginated`, payload);
   }
 }

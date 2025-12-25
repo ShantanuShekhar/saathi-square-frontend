@@ -1,11 +1,25 @@
 <!-- dashboard.component.html -->
 <div class="dashboard-container">
+  
   <mat-card class="welcome-card">
-    <h2>Welcome back, {{ userName }} 👋</h2>
-    <p>Here’s a quick overview of your society</p>
+    <div class="welcome-header">
+      <div>
+        <h2>Welcome back, {{ userName }} 👋</h2>
+        <p>Here's a quick overview of your society</p>
+      </div>
+      <button mat-raised-button color="warn" (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </div>
   </mat-card>
 
-  <div class="stats-section">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="stats-section">
     <app-stats-card icon="groups" title="Society Count" [value]="societyCount"></app-stats-card>
     <app-stats-card icon="apartment" title="Tower Count" [value]="towerCount"></app-stats-card>
     <app-stats-card icon="engineering" title="Floor Count" [value]="floorCount"></app-stats-card>
@@ -13,8 +27,13 @@
     <app-stats-card icon="payments" title="Due Payments" [value]="'25000'"></app-stats-card>
   </div>  
 
-  <div class="widgets-section">
-    <app-announcement-card></app-announcement-card>
+  <div *ngIf="!isLoading" class="widgets-section">
+    <div class="widget-with-action">
+      <app-announcement-card></app-announcement-card>
+      <button mat-fab color="primary" class="quick-announcement-btn" (click)="createQuickAnnouncement()" title="Create Quick Announcement">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
     <app-maintenance-status></app-maintenance-status>
   </div>
 </div>

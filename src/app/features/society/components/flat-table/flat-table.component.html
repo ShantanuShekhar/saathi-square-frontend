@@ -3,7 +3,18 @@
   <!-- 🔹 Filter Component -->
   <app-filters (filterChanged)="onFilterChange($event)"></app-filters>
 
-  <table class="flat-table">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading flats...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Flat Table -->
+  <table *ngIf="!isLoading" class="flat-table">
     <thead>
       <tr>
         <th>Flat No</th>
@@ -16,6 +27,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngIf="flats.length === 0">
+        <td colspan="7" class="no-data">No flats found</td>
+      </tr>
       <tr *ngFor="let flat of flats">
         <td>{{ flat.flatNo }}</td>
         <td>{{ flat.towerName }}</td>
@@ -23,8 +37,8 @@
         <td>
           <span class="status"
                 [ngClass]="{
-                  'occupied': flat.occupancyStatus === 'Occupied',
-                  'vacant': flat.occupancyStatus === 'Vacant'
+                  'occupied': flat.occupancyStatus === 'OCCUPIED' || flat.occupancyStatus === 'Occupied',
+                  'vacant': flat.occupancyStatus === 'VACANT' || flat.occupancyStatus === 'Vacant'
                 }">
             {{ flat.occupancyStatus }}
           </span>

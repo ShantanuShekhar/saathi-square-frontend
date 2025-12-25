@@ -1,0 +1,130 @@
+<h2 mat-dialog-title>
+  <mat-icon>edit</mat-icon>
+  Edit Announcement
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="editForm" class="edit-form">
+    <!-- Title Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title *</mat-label>
+      <input matInput formControlName="title" required>
+      <mat-error *ngIf="editForm.get('title')?.hasError('required') && editForm.get('title')?.touched">
+        Title is required
+      </mat-error>
+      <mat-error *ngIf="editForm.get('title')?.hasError('maxlength') && editForm.get('title')?.touched">
+        Title must not exceed 200 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Summary Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Summary</mat-label>
+      <textarea matInput formControlName="summary" rows="2" maxlength="500"></textarea>
+      <mat-hint>{{ editForm.get('summary')?.value?.length || 0 }}/500</mat-hint>
+      <mat-error *ngIf="editForm.get('summary')?.hasError('maxlength') && editForm.get('summary')?.touched">
+        Summary must not exceed 500 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Content Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Content *</mat-label>
+      <textarea matInput formControlName="content" rows="5" required></textarea>
+      <mat-error *ngIf="editForm.get('content')?.hasError('required') && editForm.get('content')?.touched">
+        Content is required
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Priority and Status Row -->
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Priority *</mat-label>
+        <mat-select formControlName="priority" required>
+          <mat-option *ngFor="let priority of priorities" [value]="priority.value">
+            {{ priority.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editForm.get('priority')?.hasError('required') && editForm.get('priority')?.touched">
+          Priority is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Status *</mat-label>
+        <mat-select formControlName="status" required>
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editForm.get('status')?.hasError('required') && editForm.get('status')?.touched">
+          Status is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Target Audience Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Target Audience</mat-label>
+      <mat-select formControlName="targetAudience">
+        <mat-option value="ALL">All Residents</mat-option>
+        <mat-option value="OWNERS">Owners Only</mat-option>
+        <mat-option value="TENANTS">Tenants Only</mat-option>
+        <mat-option value="ADMINS">Admins Only</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Scheduled At and Expires At Row -->
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Scheduled At</mat-label>
+        <input matInput [matDatepicker]="scheduledPicker" formControlName="scheduledAt">
+        <mat-datepicker-toggle matSuffix [for]="scheduledPicker"></mat-datepicker-toggle>
+        <mat-datepicker #scheduledPicker></mat-datepicker>
+        <mat-hint>Schedule for future publication</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Expires At</mat-label>
+        <input matInput [matDatepicker]="expiryPicker" formControlName="expiresAt">
+        <mat-datepicker-toggle matSuffix [for]="expiryPicker"></mat-datepicker-toggle>
+        <mat-datepicker #expiryPicker></mat-datepicker>
+        <mat-hint>Auto-expire date (optional)</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <!-- Pin Options -->
+    <mat-checkbox formControlName="isPinned">Pin this announcement</mat-checkbox>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="editForm.get('isPinned')?.value">
+      <mat-label>Pinned Until</mat-label>
+      <input matInput [matDatepicker]="pinnedPicker" formControlName="pinnedUntil">
+      <mat-datepicker-toggle matSuffix [for]="pinnedPicker"></mat-datepicker-toggle>
+      <mat-datepicker #pinnedPicker></mat-datepicker>
+      <mat-hint>Auto-unpin date (optional)</mat-hint>
+    </mat-form-field>
+
+    <!-- Attachment URL Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Attachment URL</mat-label>
+      <input matInput formControlName="attachmentUrl" type="url" placeholder="https://...">
+      <mat-hint>Link to attached document/file</mat-hint>
+    </mat-form-field>
+
+    <!-- External Link Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>External Link</mat-label>
+      <input matInput formControlName="externalLink" type="url" placeholder="https://...">
+      <mat-hint>External website link</mat-hint>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="loading || editForm.invalid">
+    <mat-icon *ngIf="!loading">save</mat-icon>
+    <mat-spinner *ngIf="loading" diameter="20" class="inline-spinner"></mat-spinner>
+    {{ loading ? 'Updating...' : 'Update Announcement' }}
+  </button>
+</mat-dialog-actions>

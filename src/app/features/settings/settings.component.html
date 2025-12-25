@@ -1,0 +1,62 @@
+<div class="settings-container">
+  <mat-card class="settings-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>settings</mat-icon>
+        Settings
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list>
+        <!-- Account Settings -->
+        <div class="settings-section">
+          <h3 class="section-title">Account</h3>
+          <mat-list-item class="clickable-item" (click)="onProfileSettings()">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>Profile Settings</div>
+            <div matListItemLine>Manage your profile information</div>
+            <mat-icon matListItemMeta>chevron_right</mat-icon>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="settings-section">
+          <h3 class="section-title">Security</h3>
+          <mat-list-item class="clickable-item" (click)="onChangePassword()">
+            <mat-icon matListItemIcon>lock</mat-icon>
+            <div matListItemTitle>Change Password</div>
+            <div matListItemLine>Update your account password</div>
+            <mat-icon matListItemMeta>chevron_right</mat-icon>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
+
+        <!-- Logout Section -->
+        <div class="settings-section">
+          <h3 class="section-title">Session</h3>
+          <div class="logout-section">
+            <div class="logout-info">
+              <mat-icon class="logout-icon">logout</mat-icon>
+              <div class="logout-text">
+                <div class="logout-title">Logout</div>
+                <div class="logout-subtitle">Sign out of your account</div>
+              </div>
+            </div>
+            <button 
+              mat-raised-button 
+              color="warn" 
+              class="logout-button"
+              (click)="onLogout()"
+              type="button">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+

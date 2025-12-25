@@ -1,19 +1,15 @@
-<div class="theme-toggle">
-  <input
-    type="checkbox"
-    id="toggle"
-    [checked]="isDarkMode"
-    (change)="toggleTheme()"
-  />
-  <label for="toggle" class="toggle-label">
-    <div class="sun">
-      <div class="rays"></div>
-      ☀️
-    </div>
-    <div class="moon">
-      🌙
-      <div class="glow"></div>
-    </div>
-    <div class="ball"></div>
-  </label>
+<div class="theme-toggle-container" [matTooltip]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+  <button 
+    class="theme-toggle-btn"
+    [class.dark-mode]="isDarkMode"
+    (click)="toggleTheme()"
+    aria-label="Toggle theme"
+    type="button">
+    <span class="toggle-track">
+      <span class="toggle-thumb">
+        <mat-icon class="theme-icon sun-icon">wb_sunny</mat-icon>
+        <mat-icon class="theme-icon moon-icon">nights_stay</mat-icon>
+      </span>
+    </span>
+  </button>
 </div>

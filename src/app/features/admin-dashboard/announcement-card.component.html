@@ -1,6 +1,36 @@
 <mat-card class="announcement-card">
-  <h3>📢 Society Announcements</h3>
-  <ul>
-    <li *ngFor="let note of announcements">{{ note }}</li>
-  </ul>
+  <div class="card-header">
+    <h3>
+      <mat-icon>campaign</mat-icon>
+      Society Announcements
+    </h3>
+    <button mat-button color="primary" (click)="viewAllAnnouncements()">
+      View All
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="30"></mat-spinner>
+    <p>Loading announcements...</p>
+  </div>
+
+  <div *ngIf="!loading && announcements.length === 0" class="empty-state">
+    <mat-icon>campaign</mat-icon>
+    <p>No announcements available</p>
+  </div>
+
+  <div *ngIf="!loading && announcements.length > 0" class="announcements-list">
+    <div *ngFor="let announcement of announcements" class="announcement-item">
+      <div class="announcement-header">
+        <h4>{{ announcement.title }}</h4>
+        <span class="date">{{ formatDate(announcement.createdAt) }}</span>
+      </div>
+      <p class="announcement-summary" *ngIf="announcement.summary">
+        {{ announcement.summary }}
+      </p>
+      <p class="announcement-content" *ngIf="!announcement.summary">
+        {{ announcement.content.length > 100 ? (announcement.content | slice:0:100) + '...' : announcement.content }}
+      </p>
+    </div>
+  </div>
 </mat-card>

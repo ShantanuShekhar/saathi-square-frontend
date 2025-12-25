@@ -7,22 +7,63 @@
 <mat-divider></mat-divider>
 
 <mat-nav-list>
-  <a mat-list-item routerLink="/dashboard">
+  <!-- Dashboard -->
+  <a mat-list-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
     <mat-icon>dashboard</mat-icon>
     <span>Dashboard</span>
   </a>
 
-  <a mat-list-item routerLink="/society">
+  <mat-divider></mat-divider>
+
+  <!-- Society Management -->
+  <div class="nav-section-title">Society Management</div>
+  <a mat-list-item routerLink="/society" routerLinkActive="active">
     <mat-icon>apartment</mat-icon>
     <span>Societies</span>
   </a>
 
-  <a mat-list-item routerLink="/flat-details">
+  <a mat-list-item routerLink="/flat-details" routerLinkActive="active">
     <mat-icon>home_work</mat-icon>
     <span>Flat Details</span>
   </a>
 
-  <a mat-list-item routerLink="/settings">
+  <a mat-list-item routerLink="/residents" routerLinkActive="active">
+    <mat-icon>people</mat-icon>
+    <span>Residents</span>
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <!-- Communication & Updates -->
+  <div class="nav-section-title">Communication</div>
+  <a mat-list-item routerLink="/announcements" routerLinkActive="active">
+    <mat-icon>campaign</mat-icon>
+    <span>Announcements</span>
+  </a>
+
+  <a mat-list-item routerLink="/complaints" routerLinkActive="active">
+    <mat-icon>report_problem</mat-icon>
+    <span>Complaints</span>
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <!-- Marketplace & Services -->
+  <div class="nav-section-title">Services</div>
+  <a mat-list-item routerLink="/marketplace" routerLinkActive="active">
+    <mat-icon>store</mat-icon>
+    <span>Marketplace</span>
+  </a>
+
+  <a mat-list-item routerLink="/visitors" routerLinkActive="active">
+    <mat-icon>how_to_reg</mat-icon>
+    <span>Visitors</span>
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <!-- Settings -->
+  <a mat-list-item routerLink="/settings" routerLinkActive="active">
     <mat-icon>settings</mat-icon>
     <span>Settings</span>
   </a>

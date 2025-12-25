@@ -1,0 +1,33 @@
+{
+  "/auth": {
+    "target": "http://localhost:1010",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/society": {
+    "target": "http://localhost:1010",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/resident": {
+    "target": "http://localhost:1010",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/complaint": {
+    "target": "http://localhost:1010",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/visitor": {
+    "target": "http://localhost:1010",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
+

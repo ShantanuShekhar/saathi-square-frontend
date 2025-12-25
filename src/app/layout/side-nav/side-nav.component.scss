@@ -1,35 +1,259 @@
+// ============================================
+// SIDEBAR NAVIGATION - Professional Design
+// ============================================
+
 .profile-section {
   text-align: center;
-  padding: 20px;
-  background: #f5f5f5;
+  padding: var(--spacing-8) var(--spacing-4);
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 50%, #8195ff 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  body.dark-theme &,
+  [data-theme="dark"] & {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  }
 
   .profile-img {
-  width: 120px;       /* adjust size */
-  height: 140px;      /* must match width for a perfect circle */
-  object-fit: cover;  /* makes sure image fills without stretching */
-  border-radius: 50%; /* circle shape */
-  border: 3px solid #fff; /* optional: white border */
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: var(--radius-full);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: var(--spacing-4);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 1;
+    transition: all var(--transition-base);
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-xl);
+    }
   }
 
   h4 {
-    margin: 10px 0 5px;
+    margin: 0 0 var(--spacing-1) 0;
     font-weight: 600;
+    font-size: 1.125rem;
+    color: white;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.01em;
   }
 
   .role {
-    font-size: 13px;
-    color: gray;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.nav-section-title {
+  padding: var(--spacing-5) var(--spacing-4) var(--spacing-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-tertiary);
+  margin-top: var(--spacing-2);
+  transition: color var(--transition-base);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: var(--spacing-4);
+    right: var(--spacing-4);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
   }
 }
 
 mat-nav-list {
+  padding: var(--spacing-2) 0;
+  background: transparent;
+
   a {
-    mat-icon {
-      margin-right: 10px;
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-4);
+    margin: var(--spacing-1) var(--spacing-2);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    font-size: 0.875rem;
+    font-weight: 500;
+    min-height: 44px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: linear-gradient(180deg, var(--primary-500), var(--primary-700));
+      border-radius: 0 var(--radius-full) var(--radius-full) 0;
+      transition: height var(--transition-base);
     }
+
+    mat-icon {
+      margin-right: var(--spacing-3);
+      color: var(--color-text-secondary);
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+      line-height: 22px;
+      transition: all var(--transition-base);
+      flex-shrink: 0;
+    }
+
+    span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-base);
+    }
+
+    // Hover state
     &:hover {
-      background: rgba(0, 0, 0, 0.04);
+      background: var(--color-bg-tertiary);
+      transform: translateX(4px);
+      color: var(--primary-600);
+
+      &::before {
+        height: 60%;
+      }
+
+      mat-icon {
+        color: var(--primary-600);
+        transform: scale(1.1);
+      }
+
+      span {
+        color: var(--primary-600);
+        font-weight: 600;
+      }
+    }
+
+    // Active state
+    &.active {
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.12), rgba(102, 126, 234, 0.08));
+      color: var(--primary-600);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+
+      &::before {
+        height: 70%;
+      }
+
+      mat-icon {
+        color: var(--primary-600);
+        transform: scale(1.15);
+      }
+
+      span {
+        color: var(--primary-600);
+        font-weight: 600;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        right: var(--spacing-3);
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        background: var(--primary-600);
+        border-radius: var(--radius-full);
+        box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+      }
+    }
+
+    // Focus state for accessibility
+    &:focus-visible {
+      outline: 2px solid var(--primary-500);
+      outline-offset: 2px;
+    }
+
+    // Active/pressed state
+    &:active {
+      transform: translateX(2px);
     }
   }
 }
 
+mat-divider {
+  margin: var(--spacing-2) 0;
+  border-top-color: var(--color-border);
+  opacity: 0.5;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profile-section {
+    padding: var(--spacing-6) var(--spacing-4);
+
+    .profile-img {
+      width: 72px;
+      height: 72px;
+    }
+
+    h4 {
+      font-size: 1rem;
+    }
+  }
+
+  mat-nav-list a {
+    padding: var(--spacing-3) var(--spacing-3);
+    margin: var(--spacing-1);
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-right: var(--spacing-2);
+    }
+
+    span {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Dark mode specific adjustments
+body.dark-theme mat-nav-list a,
+[data-theme="dark"] mat-nav-list a {
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.active {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
+    box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.2);
+  }
+}

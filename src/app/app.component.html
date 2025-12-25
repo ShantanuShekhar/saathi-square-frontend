@@ -1,12 +1,3 @@
-<div class="app-container">
-  <app-navbar></app-navbar>
-
- <div class="top-bar" *ngIf="isLoggedIn">
-  <app-theme-toggle></app-theme-toggle>
-</div>
-
-
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+<!-- App Component - Only router-outlet, no navbar for authenticated routes -->
+<!-- Authenticated routes use MainLayoutComponent which has its own sidebar and toolbar -->
+<router-outlet></router-outlet>

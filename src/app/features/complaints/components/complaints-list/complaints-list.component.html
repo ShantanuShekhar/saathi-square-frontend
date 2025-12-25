@@ -1,0 +1,176 @@
+<div class="complaints-container">
+  <!-- Header -->
+  <div class="complaints-header">
+    <h1>
+      <mat-icon>support_agent</mat-icon>
+      Complaints & Helpdesk
+    </h1>
+    <button mat-raised-button color="primary" (click)="router.navigate(['/complaints/create'])">
+      <mat-icon>add</mat-icon>
+      New Complaint
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon open">
+          <mat-icon>info</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ getStatusCount('OPEN') }}</div>
+          <div class="stat-label">Open</div>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon in-progress">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ getStatusCount('IN_PROGRESS') }}</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon resolved">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ getStatusCount('RESOLVED') }}</div>
+          <div class="stat-label">Resolved</div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters-section">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search by title, description...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let category of categories" [value]="category.value">
+            {{ category.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Priority</mat-label>
+        <mat-select [(ngModel)]="selectedPriority" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let priority of priorities" [value]="priority.value">
+            {{ priority.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading complaints...</p>
+  </div>
+
+  <!-- Complaints List -->
+  <div *ngIf="!loading" class="complaints-list">
+    <mat-card *ngFor="let complaint of complaints" class="complaint-card" (click)="viewComplaint(complaint.complaintId)">
+      <div class="complaint-header">
+        <div class="complaint-title-section">
+          <div class="ticket-number">#{{ complaint.ticketNumber }}</div>
+          <h3 class="complaint-title">{{ complaint.title }}</h3>
+        </div>
+        <div class="complaint-badges">
+          <mat-chip [class]="'priority-' + complaint.priority.toLowerCase()">
+            {{ getPriorityLabel(complaint.priority) }}
+          </mat-chip>
+          <mat-chip [color]="getStatusColor(complaint.status)">
+            {{ getStatusLabel(complaint.status) }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <p class="complaint-description">{{ complaint.description }}</p>
+
+      <div class="complaint-meta">
+        <div class="meta-item">
+          <mat-icon>category</mat-icon>
+          <span>{{ getCategoryLabel(complaint.category) }}</span>
+        </div>
+        <div class="meta-item" *ngIf="complaint.location">
+          <mat-icon>location_on</mat-icon>
+          <span>{{ complaint.location }}</span>
+        </div>
+        <div class="meta-item">
+          <mat-icon>person</mat-icon>
+          <span>{{ complaint.raisedByName || 'Unknown' }}</span>
+        </div>
+        <div class="meta-item">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ complaint.createdAt | date:'short' }}</span>
+        </div>
+      </div>
+
+      <div class="complaint-footer">
+        <div class="footer-left">
+          <span *ngIf="complaint.assignedToName" class="assigned-to">
+            <mat-icon>person_outline</mat-icon>
+            Assigned to: {{ complaint.assignedToName }}
+          </span>
+        </div>
+        <div class="footer-right">
+          <span class="comment-count">
+            <mat-icon>comment</mat-icon>
+            {{ complaint.commentCount }}
+          </span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Empty State -->
+    <div *ngIf="complaints.length === 0" class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <h2>No complaints found</h2>
+      <p>No complaints match your search criteria. Try adjusting your filters.</p>
+      <button mat-raised-button color="primary" (click)="router.navigate(['/complaints/create'])">
+        <mat-icon>add</mat-icon>
+        Create First Complaint
+      </button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator *ngIf="!loading && totalElements > 0"
+                 [length]="totalElements"
+                 [pageSize]="pageSize"
+                 [pageIndex]="currentPage - 1"
+                 [pageSizeOptions]="[10, 20, 50, 100]"
+                 (page)="onPageChange($event)">
+  </mat-paginator>
+</div>
+

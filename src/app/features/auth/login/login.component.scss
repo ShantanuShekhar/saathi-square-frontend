@@ -52,6 +52,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #212121; // Ensure text is visible
 
     form {
       width: 100%;
@@ -71,9 +72,72 @@
         margin-bottom: 2rem;
       }
 
+      // Additional global input styling for visibility
+      mat-form-field {
+        ::ng-deep {
+          .mat-mdc-text-field-wrapper {
+            background-color: white !important;
+          }
+
+          input {
+            color: #212121 !important;
+            -webkit-text-fill-color: #212121 !important;
+          }
+
+          // Ensure Material form field text is visible
+          .mdc-text-field__input {
+            color: #212121 !important;
+          }
+
+          // Focus state
+          .mdc-text-field--focused .mdc-text-field__input {
+            color: #212121 !important;
+          }
+        }
+      }
+
       .full-width {
         width: 100%;
         margin-bottom: 1.5rem;
+
+        // Fix text visibility in input fields
+        ::ng-deep {
+          .mat-mdc-text-field-wrapper {
+            background-color: white !important;
+          }
+
+          .mat-mdc-form-field-input-control {
+            input, textarea {
+              color: #212121 !important; // Dark text for visibility
+              caret-color: #1976d2 !important; // Blue caret
+            }
+          }
+
+          .mat-mdc-input-element {
+            color: #212121 !important;
+            -webkit-text-fill-color: #212121 !important;
+          }
+
+          .mat-mdc-form-field-label {
+            color: rgba(0, 0, 0, 0.6) !important;
+          }
+
+          .mat-mdc-form-field-label.mdc-floating-label--float-above {
+            color: #1976d2 !important;
+          }
+
+          // Ensure input has visible text
+          input.mat-mdc-input-element {
+            color: #212121 !important;
+            background-color: transparent !important;
+          }
+
+          // Placeholder styling
+          input::placeholder {
+            color: rgba(0, 0, 0, 0.4) !important;
+            opacity: 1 !important;
+          }
+        }
       }
 
       .actions {

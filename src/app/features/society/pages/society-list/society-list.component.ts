@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FlatTableComponent } from '../../components/flat-table/flat-table.component';
 import { FlatDetailsComponent } from '../../components/flat-details/flat-details.component';
-import { SocietyService } from '../../services/society.service';
+import { SocietyService } from '../../../core/services/society.service';
 import { Flat } from '../../models/flat.model';
 
 @Component({
@@ -31,9 +31,33 @@ export class SocietyListPageComponent implements OnInit {
 
   loadFlats() {
     this.isLoading = true;
-    this.societyService.getFlatsBySociety(1).subscribe({
-      next: (data) => { this.flats = data; this.isLoading = false; },
-      error: () => { this.isLoading = false; }
+    // TODO: Use getFlatsPaginated instead - this component may not be used
+    // If needed, implement using getFlatsPaginated with proper payload
+    const payload = {
+      createdBy: '',
+      societyId: '', // TODO: Get from user context
+      towerId: '',
+      flatNo: '',
+      floorNo: '',
+      status: '',
+      pageNo: 1,
+      pageSize: 100
+    };
+    
+    this.societyService.getFlatsPaginated(payload).subscribe({
+      next: (response) => {
+        if (response && response.status === 'SUCX001' && response.data) {
+          this.flats = response.data.content || [];
+        } else {
+          this.flats = [];
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading flats:', err);
+        this.flats = [];
+        this.isLoading = false;
+      }
     });
   }
 

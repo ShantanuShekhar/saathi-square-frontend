@@ -1,17 +1,16 @@
-<header class="navbar">
+<header class="navbar" [class.scrolled]="scrolled">
   <div class="container">
     <div class="logo">
-      <!-- <img src="assets/logo.png" alt="SathiSquare Logo"> -->
-       
+      <span>Saathi Square</span>
     </div>
     <nav class="nav-links" [class.mobile-open]="menuOpen">
       <a (click)="goToLogin()">Login</a>
-      <a href="#demo">Get Demo</a>
-      <a href="#features">Features</a>
-      <a href="#about">About</a>
-      <a href="#contact" class="cta-nav">Contact Us</a>
+      <a (click)="scrollTo('demo')">Get Demo</a>
+      <a (click)="scrollTo('features')">Features</a>
+      <a (click)="scrollTo('about')">About</a>
+      <a (click)="scrollTo('contact')" class="cta-nav">Contact Us</a>
     </nav>
-    <button class="hamburger" (click)="toggleMenu()" aria-label="Menu">
+    <button class="hamburger" (click)="toggleMenu()" aria-label="Menu" [class.active]="menuOpen">
       <span></span>
       <span></span>
       <span></span>

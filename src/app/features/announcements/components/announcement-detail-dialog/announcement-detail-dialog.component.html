@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>
+  <mat-icon>campaign</mat-icon>
+  {{ announcement.title }}
+</h2>
+
+<mat-dialog-content>
+  <div class="announcement-detail">
+    <div class="header-info">
+      <div class="badges">
+        <mat-chip [class]="'priority-chip ' + getPriorityClass(announcement.priority)">
+          {{ getPriorityLabel(announcement.priority) }}
+        </mat-chip>
+        <mat-chip *ngIf="announcement.isPinned" class="pinned-chip">
+          <mat-icon>push_pin</mat-icon>
+          Pinned
+        </mat-chip>
+        <mat-chip [class]="'status-chip status-' + announcement.status.toLowerCase()">
+          {{ announcement.status }}
+        </mat-chip>
+      </div>
+      <div class="meta-info">
+        <span *ngIf="announcement.createdByName">
+          <mat-icon>person</mat-icon>
+          {{ announcement.createdByName }}
+        </span>
+        <span>
+          <mat-icon>calendar_today</mat-icon>
+          {{ formatDate(announcement.createdAt) }}
+        </span>
+        <span *ngIf="announcement.viewCount !== undefined">
+          <mat-icon>visibility</mat-icon>
+          {{ announcement.viewCount }} views
+        </span>
+      </div>
+    </div>
+
+    <div class="content-section" *ngIf="announcement.summary">
+      <h3>Summary</h3>
+      <p>{{ announcement.summary }}</p>
+    </div>
+
+    <div class="content-section">
+      <h3>Content</h3>
+      <p class="content-text">{{ announcement.content }}</p>
+    </div>
+
+    <div class="additional-info" *ngIf="announcement.scheduledAt || announcement.expiresAt || announcement.targetAudience">
+      <h3>Additional Information</h3>
+      <div class="info-grid">
+        <div *ngIf="announcement.scheduledAt" class="info-item">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <strong>Scheduled At:</strong>
+            <span>{{ formatDate(announcement.scheduledAt) }}</span>
+          </div>
+        </div>
+        <div *ngIf="announcement.expiresAt" class="info-item">
+          <mat-icon>event_busy</mat-icon>
+          <div>
+            <strong>Expires At:</strong>
+            <span>{{ formatDate(announcement.expiresAt) }}</span>
+          </div>
+        </div>
+        <div *ngIf="announcement.targetAudience" class="info-item">
+          <mat-icon>people</mat-icon>
+          <div>
+            <strong>Target Audience:</strong>
+            <span>{{ announcement.targetAudience }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="links-section" *ngIf="announcement.attachmentUrl || announcement.externalLink">
+      <h3>Links</h3>
+      <div class="links">
+        <a *ngIf="announcement.attachmentUrl" [href]="announcement.attachmentUrl" target="_blank" class="link-item">
+          <mat-icon>attach_file</mat-icon>
+          View Attachment
+        </a>
+        <a *ngIf="announcement.externalLink" [href]="announcement.externalLink" target="_blank" class="link-item">
+          <mat-icon>link</mat-icon>
+          External Link
+        </a>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>
+

@@ -19,9 +19,19 @@ export interface SocietyCountData {
 export class SocietyService {
   private baseUrl = environment.societyBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log('SocietyService initialized with baseUrl:', this.baseUrl);
+  }
 
   getSocietyCount(userId: string): Observable<ApiResponse<SocietyCountData>> {
-    return this.http.get<ApiResponse<SocietyCountData>>(`${this.baseUrl}/${userId}/getCount`);
+    const url = `${this.baseUrl}/${userId}/getCount`;
+    console.log('Fetching society count from:', url);
+    return this.http.get<ApiResponse<SocietyCountData>>(url);
+  }
+
+  getFlatsPaginated(payload: any): Observable<ApiResponse<any>> {
+    const url = `${this.baseUrl}/paginated`;
+    console.log('Fetching flats paginated from:', url, 'Payload:', payload);
+    return this.http.post<ApiResponse<any>>(url, payload);
   }
 }

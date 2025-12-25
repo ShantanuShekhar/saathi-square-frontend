@@ -1,3 +1,7 @@
+// ============================================
+// MAIN LAYOUT COMPONENT
+// ============================================
+
 .sidenav-container {
   height: 100vh;
 }
@@ -8,10 +12,66 @@
 
 .menu-btn {
   margin-right: 10px;
+  color: white;
+  transition: all var(--transition-base);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.main-toolbar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%) !important;
+  color: white !important;
+  box-shadow: var(--shadow-md);
+  padding: 0 var(--spacing-4);
+  height: 64px;
+  transition: all var(--transition-base);
+  position: relative;
+  z-index: 2;
+
+  body.dark-theme &,
+  [data-theme="dark"] & {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+  }
+
+  .toolbar-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    flex: 1;
+    margin-left: var(--spacing-2);
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
 .main-content {
   min-height: calc(100vh - 64px); // toolbar height adjust
   padding: 1rem;
   background-color: #fafafa;
+}
+
+// Sidebar collapse animation
+.sidenav-container .sidenav {
+  transition: transform var(--transition-base), width var(--transition-base);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .sidenav {
+    width: 260px;
+  }
+
+  .main-toolbar {
+    padding: 0 var(--spacing-3);
+
+    .toolbar-title {
+      font-size: 1.125rem;
+    }
+  }
 }

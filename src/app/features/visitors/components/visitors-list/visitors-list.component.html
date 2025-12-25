@@ -1,0 +1,156 @@
+<div class="visitors-container">
+  <!-- Header -->
+  <div class="visitors-header">
+    <h1>
+      <mat-icon>person_search</mat-icon>
+      Visitor Management
+    </h1>
+    <button mat-raised-button color="primary" (click)="router.navigate(['/visitors/create'])">
+      <mat-icon>person_add</mat-icon>
+      New Visitor
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters-section">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search by name, phone, visitor code...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Visitor Type</mat-label>
+        <mat-select [(ngModel)]="selectedVisitorType" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let type of visitorTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading visitors...</p>
+  </div>
+
+  <!-- Visitors Grid -->
+  <div *ngIf="!loading" class="visitors-grid">
+    <mat-card *ngFor="let visitor of visitors" class="visitor-card" (click)="viewVisitor(visitor.visitorId)">
+      <div class="visitor-header">
+        <div class="visitor-avatar">
+          <div class="avatar-circle" [style.background-color]="getAvatarColor(visitor.visitorName)">
+            {{ getInitials(visitor.visitorName) }}
+          </div>
+        </div>
+        <div class="visitor-badges">
+          <mat-chip [class]="'visitor-type-' + visitor.visitorType.toLowerCase()">
+            {{ getVisitorTypeLabel(visitor.visitorType) }}
+          </mat-chip>
+          <mat-chip [color]="getStatusColor(visitor.status)">
+            {{ getStatusLabel(visitor.status) }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <div class="visitor-content">
+        <h3 class="visitor-name">{{ visitor.visitorName }}</h3>
+        <div class="visitor-code">Code: {{ visitor.visitorCode }}</div>
+
+        <div class="visitor-details">
+          <div class="detail-item">
+            <mat-icon>phone</mat-icon>
+            <span>{{ visitor.phoneNumber }}</span>
+          </div>
+          <div class="detail-item" *ngIf="visitor.email">
+            <mat-icon>email</mat-icon>
+            <span>{{ visitor.email }}</span>
+          </div>
+          <div class="detail-item" *ngIf="visitor.hostName">
+            <mat-icon>person</mat-icon>
+            <span>Host: {{ visitor.hostName }}</span>
+          </div>
+          <div class="detail-item" *ngIf="visitor.purpose">
+            <mat-icon>info</mat-icon>
+            <span>{{ visitor.purpose }}</span>
+          </div>
+        </div>
+
+        <div class="visitor-timing">
+          <div class="time-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="time-info">
+              <div class="time-label">Expected Arrival</div>
+              <div class="time-value">{{ visitor.expectedArrivalTime | date:'short' }}</div>
+            </div>
+          </div>
+          <div class="time-item" *ngIf="visitor.actualArrivalTime">
+            <mat-icon>login</mat-icon>
+            <div class="time-info">
+              <div class="time-label">Checked In</div>
+              <div class="time-value">{{ visitor.actualArrivalTime | date:'short' }}</div>
+            </div>
+          </div>
+          <div class="time-item" *ngIf="visitor.actualDepartureTime">
+            <mat-icon>logout</mat-icon>
+            <div class="time-info">
+              <div class="time-label">Checked Out</div>
+              <div class="time-value">{{ visitor.actualDepartureTime | date:'short' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visitor-footer">
+          <div class="footer-left">
+            <span *ngIf="visitor.gatePassNumber" class="gate-pass">
+              <mat-icon>card_membership</mat-icon>
+              Pass: {{ visitor.gatePassNumber }}
+            </span>
+            <span *ngIf="visitor.vehicleNumber" class="vehicle">
+              <mat-icon>directions_car</mat-icon>
+              {{ visitor.vehicleNumber }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Empty State -->
+    <div *ngIf="visitors.length === 0" class="empty-state">
+      <mat-icon>person_off</mat-icon>
+      <h2>No visitors found</h2>
+      <p>No visitors match your search criteria. Try adjusting your filters.</p>
+      <button mat-raised-button color="primary" (click)="router.navigate(['/visitors/create'])">
+        <mat-icon>person_add</mat-icon>
+        Add First Visitor
+      </button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator *ngIf="!loading && totalElements > 0"
+                 [length]="totalElements"
+                 [pageSize]="pageSize"
+                 [pageIndex]="currentPage - 1"
+                 [pageSizeOptions]="[12, 24, 48, 96]"
+                 (page)="onPageChange($event)">
+  </mat-paginator>
+</div>
+

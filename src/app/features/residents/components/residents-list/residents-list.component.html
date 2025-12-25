@@ -1,0 +1,182 @@
+<div class="residents-container">
+  <!-- Header -->
+  <div class="residents-header">
+    <h1>
+      <mat-icon>people</mat-icon>
+      Residents Management
+    </h1>
+    <button mat-raised-button color="primary" (click)="router.navigate(['/residents/create'])">
+      <mat-icon>person_add</mat-icon>
+      Add Resident
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters-section">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search by name, phone, email...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Relationship</mat-label>
+        <mat-select [(ngModel)]="selectedRelationshipType" (selectionChange)="onFilterChange()">
+          <mat-option *ngFor="let type of relationshipTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading residents...</p>
+  </div>
+
+  <!-- Residents Table -->
+  <mat-card *ngIf="!loading" class="residents-table-card">
+    <div class="table-container">
+      <table mat-table [dataSource]="residents" class="residents-table">
+        
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let resident">
+            <div class="resident-name-cell">
+              <div class="avatar-circle" [style.background-color]="getAvatarColor(resident.fullName)">
+                {{ getInitials(resident.fullName) }}
+              </div>
+            <div class="name-info">
+              <div class="name">{{ resident.fullName }}</div>
+              <div class="email" *ngIf="resident.email">{{ resident.email }}</div>
+            </div>
+            <mat-icon *ngIf="resident.isPrimaryResident" matTooltip="Primary Resident" class="primary-badge">star</mat-icon>
+          </div>
+          </td>
+        </ng-container>
+
+        <!-- Contact Column -->
+        <ng-container matColumnDef="contact">
+          <th mat-header-cell *matHeaderCellDef>Contact</th>
+          <td mat-cell *matCellDef="let resident">
+            <div class="contact-info">
+              <div *ngIf="resident.phoneNumber">
+                <mat-icon>phone</mat-icon>
+                {{ resident.phoneNumber }}
+              </div>
+              <div *ngIf="resident.alternatePhone" class="alternate-phone">
+                <mat-icon>phone_android</mat-icon>
+                {{ resident.alternatePhone }}
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Relationship Column -->
+        <ng-container matColumnDef="relationship">
+          <th mat-header-cell *matHeaderCellDef>Relationship</th>
+          <td mat-cell *matCellDef="let resident">
+            <mat-chip [class]="'relationship-' + resident.relationshipType.toLowerCase()">
+              {{ getRelationshipLabel(resident.relationshipType) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let resident">
+            <mat-chip [color]="getStatusColor(resident.status)">
+              {{ getStatusLabel(resident.status) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Flat Column -->
+        <ng-container matColumnDef="flatId">
+          <th mat-header-cell *matHeaderCellDef>Flat</th>
+          <td mat-cell *matCellDef="let resident">
+            <span *ngIf="resident.flatId" class="flat-badge">{{ resident.flatId }}</span>
+            <span *ngIf="!resident.flatId" class="no-flat">-</span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+          <td mat-cell *matCellDef="let resident">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="viewResident(resident.residentId)">
+                <mat-icon>visibility</mat-icon>
+                <span>View</span>
+              </button>
+              <button mat-menu-item (click)="editResident(resident.residentId)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button *ngIf="resident.status === 'PENDING_VERIFICATION'" 
+                      mat-menu-item 
+                      (click)="verifyResident(resident.residentId)">
+                <mat-icon>verified</mat-icon>
+                <span>Verify</span>
+              </button>
+              <button *ngIf="resident.status === 'ACTIVE'" 
+                      mat-menu-item 
+                      (click)="moveOutResident(resident.residentId)">
+                <mat-icon>logout</mat-icon>
+                <span>Move Out</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+            (click)="viewResident(row.residentId)" 
+            class="resident-row"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="residents.length === 0" class="empty-state">
+        <mat-icon>people_outline</mat-icon>
+        <h2>No residents found</h2>
+        <p>No residents match your search criteria. Try adjusting your filters.</p>
+        <button mat-raised-button color="primary" (click)="router.navigate(['/residents/create'])">
+          <mat-icon>person_add</mat-icon>
+          Add First Resident
+        </button>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator *ngIf="totalElements > 0"
+                   [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageIndex]="currentPage - 1"
+                   [pageSizeOptions]="[10, 20, 50, 100]"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+</div>
+

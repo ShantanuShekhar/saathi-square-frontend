@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -9,11 +9,22 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   styleUrls: ['./landing-page.component.scss']
 })
-export class LandingPageComponent {
+export class LandingPageComponent implements OnInit {
   menuOpen = false;
   email = 'info@sathisquare.com';
+  scrolled = false;
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    this.scrolled = window.scrollY > 50;
+  }
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
@@ -27,7 +38,7 @@ export class LandingPageComponent {
   scrollTo(id: string): void {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     this.menuOpen = false; // Close mobile menu after click
   }

@@ -1,0 +1,125 @@
+<div class="marketplace-container">
+  <!-- Header -->
+  <div class="marketplace-header">
+    <h1>Society Marketplace</h1>
+    <button mat-raised-button color="primary" (click)="createPost()">
+      <mat-icon>add</mat-icon>
+      Create Post
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search posts...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Post Type</mat-label>
+      <mat-select [(ngModel)]="selectedPostType" (selectionChange)="onFilterChange()">
+        <mat-option *ngFor="let type of postTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+        <mat-option *ngFor="let status of postStatuses" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="onSearch()">
+      Search
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading posts...</p>
+  </div>
+
+  <!-- Posts Grid -->
+  <div *ngIf="!loading" class="posts-grid">
+    <mat-card *ngFor="let post of posts" class="post-card" (click)="viewPost(post.postId)">
+      <!-- Image Section -->
+      <div class="post-image-container">
+        <img *ngIf="post.images && post.images.length > 0" 
+             [src]="post.images[0].imageUrl" 
+             [alt]="post.title"
+             class="post-image"
+             (error)="handleImageError($event)">
+        <div *ngIf="!post.images || post.images.length === 0" class="no-image">
+          <mat-icon>image</mat-icon>
+          <span>No Image</span>
+        </div>
+        <mat-chip *ngIf="post.status === 'SOLD'" class="sold-badge">SOLD</mat-chip>
+      </div>
+
+      <!-- Content Section -->
+      <mat-card-content>
+        <div class="post-header">
+          <mat-chip [class]="'post-type-' + post.postType.toLowerCase()">
+            {{ getPostTypeLabel(post.postType) }}
+          </mat-chip>
+          <span class="post-date">{{ post.createdAt | date:'short' }}</span>
+        </div>
+
+        <h3 class="post-title">{{ post.title }}</h3>
+        
+        <p class="post-description" *ngIf="post.description">
+          {{ post.description.length > 100 ? (post.description | slice:0:100) + '...' : post.description }}
+        </p>
+
+        <div class="post-details">
+          <div *ngIf="post.price" class="price">
+            <mat-icon>attach_money</mat-icon>
+            <strong>{{ formatPrice(post.price) }}</strong>
+          </div>
+          <div *ngIf="post.location" class="location">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ post.location }}</span>
+          </div>
+        </div>
+
+        <div class="post-footer">
+          <span class="comment-count">
+            <mat-icon>comment</mat-icon>
+            {{ post.commentCount }}
+          </span>
+          <span class="post-author" *ngIf="post.createdByName">
+            By {{ post.createdByName }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && posts.length === 0" class="empty-state">
+    <mat-icon>shopping_bag</mat-icon>
+    <h2>No posts found</h2>
+    <p>Be the first to create a post in the marketplace!</p>
+    <button mat-raised-button color="primary" (click)="createPost()">
+      Create Your First Post
+    </button>
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator
+    *ngIf="!loading && posts.length > 0"
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[12, 24, 48]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>
+

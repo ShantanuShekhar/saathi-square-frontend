@@ -71,6 +71,38 @@
     }
   }
 
+  .loading-indicator,
+  .error-message {
+    padding: 2rem;
+    text-align: center;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin: 1rem 0;
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .error-message {
+    background: #ffebee;
+    color: #c62828;
+    
+    p {
+      color: #c62828;
+      font-weight: 500;
+    }
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+    font-style: italic;
+  }
+
   .pagination {
     display: flex;
     align-items: center;

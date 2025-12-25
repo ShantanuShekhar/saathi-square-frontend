@@ -1,0 +1,132 @@
+.settings-container {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-card {
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
+
+    mat-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.settings-section {
+  margin-bottom: 1.5rem;
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+    color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+  }
+}
+
+.logout-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background-color: rgba(244, 67, 54, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+  margin: 1rem 0;
+
+  .logout-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+
+    .logout-icon {
+      color: #f44336;
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .logout-text {
+      .logout-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-primary, rgba(0, 0, 0, 0.87));
+        margin-bottom: 0.25rem;
+      }
+
+      .logout-subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+      }
+    }
+  }
+
+  .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    min-width: 120px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    mat-icon {
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+mat-divider {
+  margin: 0.5rem 0;
+}
+
+.clickable-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  mat-icon[matListItemMeta] {
+    color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+body.dark-theme .clickable-item:hover,
+[data-theme="dark"] .clickable-item:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+// Dark mode support
+body.dark-theme .section-title,
+[data-theme="dark"] .section-title {
+  color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+}
+

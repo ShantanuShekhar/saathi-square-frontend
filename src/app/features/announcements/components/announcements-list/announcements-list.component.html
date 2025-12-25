@@ -1,0 +1,211 @@
+<div class="announcements-container">
+  <!-- Header -->
+  <div class="announcements-header">
+    <div>
+      <h1>Society Announcements</h1>
+      <p class="subtitle">Stay updated with important notices and updates</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="createAnnouncement()" *ngIf="isAdminView">
+        <mat-icon>add</mat-icon>
+        Create Announcement
+      </button>
+      <button mat-stroked-button (click)="toggleAdminView()">
+        {{ isAdminView ? 'Resident View' : 'Admin View' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters (Admin View) -->
+  <div class="filters-section" *ngIf="isAdminView">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search announcements...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+        <mat-option *ngFor="let status of statuses" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Priority</mat-label>
+      <mat-select [(ngModel)]="selectedPriority" (selectionChange)="onFilterChange()">
+        <mat-option *ngFor="let priority of priorities" [value]="priority.value">
+          {{ priority.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="onSearch()">
+      Search
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading announcements...</p>
+  </div>
+
+  <!-- Pinned Announcements Section -->
+  <div *ngIf="!loading && pinnedAnnouncements.length > 0" class="pinned-section">
+    <h2 class="section-title">
+      <mat-icon>push_pin</mat-icon>
+      Pinned Announcements
+    </h2>
+    <div class="announcements-grid">
+      <mat-card *ngFor="let announcement of pinnedAnnouncements" 
+                class="announcement-card pinned-card" 
+                (click)="viewAnnouncement(announcement.announcementId)">
+        <mat-card-header>
+          <div class="card-header-content">
+            <div class="card-title-section">
+              <h3 class="announcement-title">{{ announcement.title }}</h3>
+              <div class="badges">
+                <mat-chip [class]="'priority-chip ' + getPriorityClass(announcement.priority)">
+                  {{ getPriorityLabel(announcement.priority) }}
+                </mat-chip>
+                <mat-chip class="pinned-chip">
+                  <mat-icon>push_pin</mat-icon>
+                  Pinned
+                </mat-chip>
+              </div>
+            </div>
+            <div class="card-header-actions">
+              <button *ngIf="isAdminView" 
+                      mat-icon-button 
+                      color="primary" 
+                      (click)="editAnnouncement($event, announcement)"
+                      matTooltip="Edit announcement"
+                      class="edit-button">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <span class="date">{{ formatDate(announcement.createdAt) }}</span>
+            </div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="announcement-summary" *ngIf="announcement.summary">
+            {{ announcement.summary }}
+          </p>
+          <p class="announcement-content" *ngIf="!announcement.summary">
+            {{ announcement.content.length > 150 ? (announcement.content | slice:0:150) + '...' : announcement.content }}
+          </p>
+          <div class="announcement-meta">
+            <span *ngIf="announcement.expiresAt" class="expiry">
+              <mat-icon>schedule</mat-icon>
+              Expires: {{ formatDate(announcement.expiresAt) }}
+            </span>
+            <span *ngIf="isEdited(announcement)" class="edited-indicator" matTooltip="Updated on {{ formatUpdatedDate(announcement.updatedAt) }}">
+              <mat-icon>edit</mat-icon>
+              Edited
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Regular Announcements Section -->
+  <div *ngIf="!loading" class="announcements-section">
+    <h2 class="section-title" *ngIf="pinnedAnnouncements.length > 0">
+      All Announcements
+    </h2>
+    <h2 class="section-title" *ngIf="pinnedAnnouncements.length === 0">
+      Announcements
+    </h2>
+
+    <div class="announcements-grid">
+      <mat-card *ngFor="let announcement of announcements" 
+                class="announcement-card" 
+                [class.scheduled]="isScheduled(announcement)"
+                [class.expired]="isExpired(announcement)"
+                (click)="viewAnnouncement(announcement.announcementId)">
+        <mat-card-header>
+          <div class="card-header-content">
+            <div class="card-title-section">
+              <h3 class="announcement-title">{{ announcement.title }}</h3>
+              <div class="badges">
+                <mat-chip [class]="'priority-chip ' + getPriorityClass(announcement.priority)">
+                  {{ getPriorityLabel(announcement.priority) }}
+                </mat-chip>
+                <mat-chip *ngIf="announcement.status === 'SCHEDULED'" class="scheduled-chip">
+                  <mat-icon>schedule</mat-icon>
+                  Scheduled
+                </mat-chip>
+                <mat-chip *ngIf="announcement.status === 'DRAFT'" class="draft-chip">
+                  Draft
+                </mat-chip>
+                <mat-chip *ngIf="isExpired(announcement)" class="expired-chip">
+                  Expired
+                </mat-chip>
+              </div>
+            </div>
+            <div class="card-header-actions">
+              <button *ngIf="isAdminView" 
+                      mat-icon-button 
+                      color="primary" 
+                      (click)="editAnnouncement($event, announcement)"
+                      matTooltip="Edit announcement"
+                      class="edit-button">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <span class="date">{{ formatDate(announcement.createdAt) }}</span>
+            </div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="announcement-summary" *ngIf="announcement.summary">
+            {{ announcement.summary }}
+          </p>
+          <p class="announcement-content" *ngIf="!announcement.summary">
+            {{ announcement.content.length > 150 ? (announcement.content | slice:0:150) + '...' : announcement.content }}
+          </p>
+          <div class="announcement-meta">
+            <span *ngIf="announcement.viewCount !== undefined" class="view-count">
+              <mat-icon>visibility</mat-icon>
+              {{ announcement.viewCount }} views
+            </span>
+            <span *ngIf="announcement.expiresAt" class="expiry">
+              <mat-icon>schedule</mat-icon>
+              Expires: {{ formatDate(announcement.expiresAt) }}
+            </span>
+            <span *ngIf="isEdited(announcement)" class="edited-indicator" matTooltip="Updated on {{ formatUpdatedDate(announcement.updatedAt) }}">
+              <mat-icon>edit</mat-icon>
+              Edited
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && announcements.length === 0 && pinnedAnnouncements.length === 0" class="empty-state">
+    <mat-icon>campaign</mat-icon>
+    <h2>No announcements found</h2>
+    <p *ngIf="!isAdminView">Check back later for updates!</p>
+    <p *ngIf="isAdminView">Create your first announcement to keep residents informed.</p>
+    <button *ngIf="isAdminView" mat-raised-button color="primary" (click)="createAnnouncement()">
+      Create Announcement
+    </button>
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator
+    *ngIf="!loading && announcements.length > 0"
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>
+

@@ -6,9 +6,9 @@ frontend:
         - npm ci
     build:
       commands:
-        - npm run build
+        - npm run build -- --configuration production
   artifacts:
-    baseDirectory: saathi-square-frontend
+    baseDirectory: dist/saathi-square-frontend
     files:
       - '**/*'
   cache:

@@ -8,7 +8,7 @@ frontend:
       commands:
         - npm run build -- --configuration=production
   artifacts:
-    baseDirectory: dist/sathi-square
+    baseDirectory: dist/sathi-square/browser
     files:
       - '**/*'
   cache:
